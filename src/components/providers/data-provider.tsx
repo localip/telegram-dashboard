@@ -24,7 +24,7 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 
 	useEffect(() => {
 		console.log('hi');
-		const ws = new WebSocket('ws://localhost:8098');
+		const ws = new WebSocket('ws://18.233.176.238:8098');
 
 		ws.addEventListener('open', () => {
 			console.info('Socket opened');
