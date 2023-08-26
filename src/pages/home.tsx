@@ -63,11 +63,7 @@ function Home() {
 	}, []);
 
 	useEffect(() => {
-		if (bottomRef.current) {
-			if ((window.innerHeight + window.scrollY) + 100 >= document.body.offsetHeight) {
-				scrollToBottom();
-			}
-		}
+		scrollToBottom();
 	}, [messages]);
 
 	const content = Object.values(messages).flat(Infinity) as unknown as Message[];
