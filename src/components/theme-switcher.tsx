@@ -1,9 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from '~/components/dropdown-menu';
-import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/tooltip';
 import { useTheme } from '~/components/providers/theme-provider';
 import { Button } from '~/components/button';
 import { Moon, Sun } from 'lucide-react';
-
 
 export default function ModeToggle(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
 	const { setTheme, theme } = useTheme();

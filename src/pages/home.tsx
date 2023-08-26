@@ -1,7 +1,5 @@
 import Header from '~/components/header';
 import { useData } from '~/components/providers/data-provider';
-import Separator from '~/components/separator';
-import List from 'react-list';
 import { useEffect, useRef } from 'react';
 
 export const path = '/';
