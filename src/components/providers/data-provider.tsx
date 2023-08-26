@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import config from '~/../config.json';
 
 type DataProviderProps = {
 	children: React.ReactNode;
@@ -8,30 +9,36 @@ type DataProviderState = {
 	messages: Record<string, string>;
 	isLoading: boolean;
 	setMessages: (messages: DataProviderState['messages']) => void;
+	clear: () => void;
 };
 
 const initial = {
 	messages: {},
 	isLoading: true,
-	setMessages: () => null
+	setMessages: () => null,
+	clear: () => null
 };
 
 const DataProviderContext = createContext<DataProviderState>(initial);
 
 function DataProvider({ children, ...props }: DataProviderProps) {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const ws = useRef<InstanceType<typeof WebSocket>>(null);
 	const [messages, setMessages] = useState({});
 
 	useEffect(() => {
-		console.log('hi');
-		const ws = new WebSocket('ws://18.233.176.238:8098');
+		const socket = new WebSocket(config.socket);
+		// @ts-ignore
+		ws.current = socket;
 
-		ws.addEventListener('open', () => {
+		socket.addEventListener('close', console.log);
+
+		socket.addEventListener('open', () => {
 			console.info('Socket opened');
 			setIsLoading(false);
 		});
 
-		ws.addEventListener('message', (event) => {
+		socket.addEventListener('message', (event) => {
 			try {
 				const parsed = JSON.parse(event.data);
 				setMessages(parsed);
@@ -40,7 +47,7 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 			}
 		});
 
-		return () => ws.close();
+		return () => socket.close();
 	}, []);
 
 	useEffect(() => {
@@ -51,6 +58,10 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 	const ctx = {
 		messages,
 		isLoading,
+		clear: () => {
+			ws.current!.send('DELETE');
+			setMessages({});
+		},
 		setMessages: (messages: DataProviderState['messages']) => {
 			setMessages(messages);
 		}

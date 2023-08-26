@@ -1,6 +1,8 @@
 import Header from '~/components/header';
 import { useData } from '~/components/providers/data-provider';
 import Separator from '~/components/separator';
+import List from 'react-list';
+import { useEffect, useRef } from 'react';
 
 export const path = '/';
 export const element = Home;
@@ -20,19 +22,18 @@ export interface Listener {
 
 export interface Message {
 	listener: Listener;
+	time: Number;
 	reply?: {
 		id: string;
 		text: string;
 		author: {
 			username: string;
-			displayName: string;
 			id: string;
 		};
 	};
 	text: string;
 	author: {
 		username: string;
-		displayName: string;
 		id: string;
 	};
 	id: string;
@@ -44,19 +45,44 @@ export interface Message {
 }
 
 function Home() {
-	const { messages } = useData();
+	const { messages, isLoading } = useData();
+	const bottomRef = useRef<HTMLDivElement>();
 
-	const content = Object.values(messages).flat(Infinity);
+	const scrollToBottom = () => {
+		if (bottomRef.current) {
+			bottomRef.current.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start'
+			});
+		}
+	};
+
+	useEffect(() => {
+		scrollToBottom();
+	}, []);
+
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
+
+	const content = Object.values(messages).flat(Infinity) as unknown as Message[];
+	// @ts-ignore
+	const sorted = content.sort((a, b) => a.time - b.time);
+
 
 	return <div>
 		<Header />
-		<div className='min-h-[100vh] whitespace-pre p-5'>
-			{content.map((message, idx) => <>
-				<div className='py-1'>
-					{(message as unknown as Message).text}
-				</div>
-				{idx !== content.length - 1 && <Separator />}
-			</>)}
+		<div className='whitespace-pre p-5'>
+			{!isLoading && !sorted.length && <div>
+				No messages.
+			</div>}
+			{sorted.map((message) => <div key={message.id} className='p-2 bg-secondary my-2 rounded-md'>
+				{message.text}
+			</div>)}
+			<div ref={(_) => bottomRef.current = _!} className='list-bottom' />
+			{isLoading && <div>
+				Loading messages...
+			</div>}
 			{/* <Separator className='my-5 mx-60 w-auto' /> */}
 		</div>
 	</div>;

@@ -26,6 +26,9 @@ dependencies:
   '@types/node':
     specifier: ^20.5.6
     version: 20.5.6
+  '@types/react-list':
+    specifier: ^0.8.7
+    version: 0.8.7
   '@types/ws':
     specifier: ^8.5.5
     version: 8.5.5
@@ -50,6 +53,12 @@ dependencies:
   react-helmet:
     specifier: ^6.1.0
     version: 6.1.0(react@18.2.0)
+  react-list:
+    specifier: ^0.8.17
+    version: 0.8.17(react@18.2.0)
+  react-list-lazy-load:
+    specifier: ^1.1.2
+    version: 1.1.2(react-dom@18.2.0)(react-list@0.8.17)(react@18.2.0)
   react-router-dom:
     specifier: ^6.15.0
     version: 6.15.0(react-dom@18.2.0)(react@18.2.0)
@@ -1153,6 +1162,12 @@ packages:
       '@types/react': 18.2.20
     dev: true
 
+  /@types/react-list@0.8.7:
+    resolution: {integrity: sha512-TaPwZNx+sNY2djMWPqf81SfimnWIob/jjZbQJkJRZMf/G6Zu+gFpUoou/70MkZhbKhREk1eTNZFmbokBwAmbBg==}
+    dependencies:
+      '@types/react': 18.2.20
+    dev: false
+
   /@types/react@18.2.20:
     resolution: {integrity: sha512-WKNtmsLWJM/3D5mG4U84cysVY31ivmyw85dE84fOCk5Hx78wezB/XEjVPWl2JTZ5FkEeaTJf+VgUAUn3PE7Isw==}
     dependencies:
@@ -1690,6 +1705,28 @@ packages:
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: false
+
+  /react-list-lazy-load@1.1.2(react-dom@18.2.0)(react-list@0.8.17)(react@18.2.0):
+    resolution: {integrity: sha512-UJDA7vOYe56QRhCx8qMRkGpzBG1Qiy9IPAKenAloEqqm+GygONw7yDRRtvu3vlGmOq6PGLT/RFlSX17Ze5myDg==}
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0
+      react-dom: ^0.14.0 || ^ 15.0.0 || ^16.0.0
+      react-list: ^0.7.0 || ^0.8.0 < 0.8.10 || ^0.8.10
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-list: 0.8.17(react@18.2.0)
+    dev: false
+
+  /react-list@0.8.17(react@18.2.0):
+    resolution: {integrity: sha512-pgmzGi0G5uGrdHzMhgO7KR1wx5ZXVvI3SsJUmkblSAKtewIhMwbQiMuQiTE83ozo04BQJbe0r3WIWzSO0dR1xg==}
+    peerDependencies:
+      react: 0.14 || 15 - 18
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: false
 
   /react-remove-scroll-bar@2.3.4(@types/react@18.2.20)(react@18.2.0):
