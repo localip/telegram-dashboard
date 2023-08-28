@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { Message } from '../../../types/structs';
 import config from '~/../config.json';
 import { sleep } from '~/utils';
 
@@ -14,7 +15,7 @@ type DataProviderState = {
 };
 
 const initial = {
-	messages: {},
+	messages: [],
 	isLoading: true,
 	setMessages: () => null,
 	clear: () => null
@@ -23,9 +24,9 @@ const initial = {
 const DataProviderContext = createContext<DataProviderState>(initial);
 
 function DataProvider({ children, ...props }: DataProviderProps) {
+	const [messages, setMessages] = useState<{ messages: Message[]; }>({ messages: [] });
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const ws = useRef<InstanceType<typeof WebSocket>>(null);
-	const [messages, setMessages] = useState({});
 
 	useEffect(() => {
 		function onUnload() {
@@ -58,7 +59,7 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 
 				try {
 					const parsed = JSON.parse(event.data);
-					setMessages(parsed);
+					setMessages({ messages: parsed });
 				} catch (e) {
 					console.error('!!! Failed parsing WebSocket message !!!');
 				}
@@ -75,14 +76,14 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 	}, []);
 
 	const ctx = {
-		messages,
+		messages: messages.messages,
 		isLoading,
 		clear: () => {
 			ws.current!.send('DELETE');
-			setMessages({});
+			setMessages({ messages: [] });
 		},
 		setMessages: (messages: DataProviderState['messages']) => {
-			setMessages(messages);
+			setMessages({ messages });
 		}
 	};
 

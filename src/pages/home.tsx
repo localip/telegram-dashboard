@@ -1,5 +1,6 @@
 import { useData } from '~/components/providers/data-provider';
 import ErrorBoundary from '~/components/error-boundary';
+import { Message } from '~/../types/structs';
 import { useEffect, useRef } from 'react';
 import Header from '~/components/header';
 import Markdown from 'react-markdown';
