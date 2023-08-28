@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import config from '~/../config.json';
+import { sleep } from '~/utils';
 
 type DataProviderProps = {
 	children: React.ReactNode;
@@ -27,33 +28,51 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 	const [messages, setMessages] = useState({});
 
 	useEffect(() => {
-		const socket = new WebSocket(config.socket);
-		// @ts-ignore
-		ws.current = socket;
+		function onUnload() {
+			ws.current?.close();
+		}
 
-		socket.addEventListener('close', console.log);
+		function createSocket() {
+			if (ws.current) return;
 
-		socket.addEventListener('open', () => {
-			console.info('Socket opened');
-			setIsLoading(false);
-		});
+			const socket = new WebSocket(config.socket);
+			// @ts-ignore
+			ws.current = socket;
 
-		socket.addEventListener('message', (event) => {
-			try {
-				const parsed = JSON.parse(event.data);
-				setMessages(parsed);
-			} catch (e) {
-				console.error('!!! Failed parsing WebSocket message !!!');
-			}
-		});
+			socket.addEventListener('close', async () => {
+				// @ts-ignore
+				ws.current = null;
 
-		return () => socket.close();
+				console.log('Socket closed, waiting 1000ms then retrying...');
+				await sleep(1000);
+
+				createSocket();
+			});
+
+			socket.addEventListener('open', () => {
+				console.info('Socket opened');
+			});
+
+			socket.addEventListener('message', (event) => {
+				if (isLoading) setIsLoading(false);
+
+				try {
+					const parsed = JSON.parse(event.data);
+					setMessages(parsed);
+				} catch (e) {
+					console.error('!!! Failed parsing WebSocket message !!!');
+				}
+			});
+		}
+
+		createSocket();
+		document.addEventListener('beforeunload', onUnload);
+
+		return () => {
+			document.removeEventListener('beforeunload', onUnload);
+			ws.current!.close();
+		};
 	}, []);
-
-	useEffect(() => {
-
-		// updateLocale();
-	}, [messages]);
 
 	const ctx = {
 		messages,
