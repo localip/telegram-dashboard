@@ -110,6 +110,5 @@ function Home() {
 				Loading messages...
 			</div>}
 		</div>
-		{/* <Separator className='my-5 mx-60 w-auto' /> */}
 	</div >;
 }
