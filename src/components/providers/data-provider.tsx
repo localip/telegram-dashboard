@@ -7,7 +7,7 @@ type DataProviderProps = {
 };
 
 type DataProviderState = {
-	messages: Record<string, string>;
+	messages: Message[];
 	isLoading: boolean;
 	setMessages: (messages: DataProviderState['messages']) => void;
 	clear: () => void;
