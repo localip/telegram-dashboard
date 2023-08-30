@@ -49,7 +49,7 @@ function Home() {
 						components={{
 							a: (props: React.HTMLProps<HTMLAnchorElement>) => {
 								if (props.href === '') {
-									if (config.ignoredTags.some(t => String(props.children).toLowerCase().includes(t.toLowerCase()))) {
+									if (config.ignoredTags.some(t => String(props.children).toLowerCase() === t.toLowerCase())) {
 										return props.children;
 									}
 
@@ -60,7 +60,7 @@ function Home() {
 							}
 						}}
 					>
-						{message.text.replaceAll(/#(\w+)/g, '[#$1]()')}
+						{message.text.replaceAll(/#((\w|\$)+)/g, '[#$1]()')}
 					</Markdown>
 				</ErrorBoundary>;
 			})}
