@@ -1,5 +1,5 @@
 {
-	"socket": "ws://18.233.176.238:8098",
+	"socket": "ws://localhost:8098",
 	"ignoredTags": [
 		"USDT",
 		"Ethereum",

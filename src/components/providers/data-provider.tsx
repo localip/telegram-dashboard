@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Message } from '../../../types/structs';
 import config from '~/../config.json';
+import { useToast } from '~/hooks';
 import { sleep } from '~/utils';
 
 type DataProviderProps = {
@@ -10,8 +11,8 @@ type DataProviderProps = {
 type DataProviderState = {
 	messages: Message[];
 	isLoading: boolean;
-	setMessages: (messages: DataProviderState['messages']) => void;
-	clear: () => void;
+	setMessages: (messages: Message[]) => void;
+	clear: (password: string) => void;
 };
 
 const initial = {
@@ -27,6 +28,7 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 	const [messages, setMessages] = useState<{ messages: Message[]; }>({ messages: [] });
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const ws = useRef<InstanceType<typeof WebSocket>>(null);
+	const { toast } = useToast();
 
 	useEffect(() => {
 		function onUnload() {
@@ -55,11 +57,23 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 			});
 
 			socket.addEventListener('message', (event) => {
-				if (isLoading) setIsLoading(false);
-
 				try {
-					const parsed = JSON.parse(event.data);
-					setMessages({ messages: parsed });
+					const payload = JSON.parse(event.data);
+					console.log(payload);
+
+					switch (payload.type) {
+						case 'DELETE_SUCCESS':
+							setMessages({ messages: [] });
+							toast({ title: 'Feed cleared', description: 'The feed has been successfully cleared.' });
+							break;
+						case 'DELETE_FAILED':
+							toast({ variant: 'destructive', title: 'Feed not cleared', description: 'The password you provided is invalid.' });
+							break;
+						case 'MESSAGES_UPDATE':
+							if (isLoading) setIsLoading(false);
+							setMessages({ messages: payload.data });
+							break;
+					}
 				} catch (e) {
 					console.error('!!! Failed parsing WebSocket message !!!');
 				}
@@ -78,11 +92,10 @@ function DataProvider({ children, ...props }: DataProviderProps) {
 	const ctx = {
 		messages: messages.messages,
 		isLoading,
-		clear: () => {
-			ws.current!.send('DELETE');
-			setMessages({ messages: [] });
+		clear: (password: string) => {
+			ws.current!.send(JSON.stringify({ type: 'DELETE', password }));
 		},
-		setMessages: (messages: DataProviderState['messages']) => {
+		setMessages: (messages: Message[]) => {
 			setMessages({ messages });
 		}
 	};

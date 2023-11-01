@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { DataProvider, ThemeProvider } from '~/components/providers';
 import { TooltipProvider } from '~/components/tooltip';
+import { Toaster } from '~/components/toaster';
 import * as Pages from '~/pages';
 import './global.css';
 
@@ -13,6 +14,7 @@ function App() {
 			<DataProvider>
 				<ThemeProvider defaultTheme='system'>
 					<RouterProvider router={router} />
+					<Toaster />
 				</ThemeProvider>
 			</DataProvider>
 		</TooltipProvider>
