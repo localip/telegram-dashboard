@@ -24,8 +24,7 @@ function Header() {
 						<DialogHeader>
 							<DialogTitle>Enter your password</DialogTitle>
 							<DialogDescription>
-								To clear the feed, you must provide the password you set in the telegram forwarder. <br /> <br />
-								If the password you provide is correct, the feed will successfully clear. If not, your request will be ignored.
+								To clear the feed, you must provide the password you set in the telegram forwarder.
 							</DialogDescription>
 						</DialogHeader>
 						<div className='flex flex-col mb-2 gap-3'>
