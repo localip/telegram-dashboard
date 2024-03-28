@@ -1,11 +1,32 @@
 {
-	"socket": "ws://localhost:8098",
+	"socket": "ws://100.25.128.52:8098",
 	"ignoredTags": [
 		"USDT",
 		"Ethereum",
 		"ETH",
 		"USDC",
 		"WETH",
-		"uniswapv2"
+		"uniswapv2",
+		"base",
+		"1inch",
+		"UniswapV3",
+		"CowSwap",
+		"UNI",
+		"BNB",
+		"arbitrum",
+		"PikaProtocol",
+		"optimism",
+		"polygon",
+		"1inchV5",
+		"CurveV2",
+		"WBNB",
+		"PancakeSwap",
+		"PancakeSwapV2",
+		"FRAX",
+		"BUSD",
+		"MetaAggregationRouterV2",
+		"ParaSwapP5",
+		"Firebird",
+		"avalanche"
 	]
 }
