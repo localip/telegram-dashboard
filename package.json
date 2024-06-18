@@ -38,7 +38,7 @@
 		"tailwind-merge": "^1.14.0",
 		"tailwindcss-animate": "^1.0.6",
 		"vite-tsconfig-paths": "^4.2.0",
-		"ws": "^8.13.0"
+		"ws": "^8.17.1"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.20",
